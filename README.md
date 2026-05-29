@@ -1,9 +1,9 @@
-# ☕ Say Tea Coffee - Franchise POS & Management System
+# Say Tea Coffee - Franchise POS & Management System
 
 A multi-tier Windows desktop application engineered for F&B franchise management. This project demonstrates **Object-Oriented Programming (OOP)** principles, separation of concerns (UI vs. Business Logic), and strict database transaction management.
 
 
-## 🚀 Key Technical Highlights
+## Key Technical Highlights
 * **HMI & UI Design:** Developed using **C# WPF** and **XAML**. Implemented `ObservableCollection` for real-time Data Binding and state management without performance degradation.
 * **Database & ACID Transactions:** Architected a **MySQL** relational database. Applied strict transaction structures (`BEGIN`, `COMMIT`, `ROLLBACK`) to ensure 100% data integrity during concurrent order processing and automated inventory deductions.
 * **OOP Architecture:** Utilized Interface implementation, Abstraction, and Polymorphism to handle dynamic UI rendering and multi-window routing.
@@ -13,7 +13,7 @@ To test this application locally, you must have the following installed:
 1. **Windows OS** with .NET Desktop Runtime (v6.0 or higher).
 2. **MySQL Server** (or XAMPP/WAMP) running on port `3306`.
 
-## 🛠️ Installation & Setup Guide
+## Installation & Setup Guide
 
 ### Step 1: Database Setup
 1. Open MySQL Workbench or phpMyAdmin.
@@ -33,7 +33,7 @@ Locate the `connectionString` variable in the following files and update your `U
 3. Make sure the build configuration dropdown on the top toolbar is set to **Debug** (for inspecting code) or **Release** (for maximum performance).
 4. Press **F5** (Start Debugging) or **Ctrl + F5** (Start Without Debugging) to automatically compile, build, and launch the application.
 
-## 🔑 Default Test Accounts
+## Default Test Accounts
 After running the app, use the following credentials to log in:
 * **Admin / Manager Role:**
   * Username: `admin`
@@ -41,5 +41,3 @@ After running the app, use the following credentials to log in:
 * **Staff Role (POS System):**
   * Username: *(Create one via the Admin dashboard)*
 
----
-*Created by [Your Name] - Electronics & Embedded Systems Engineering.*
