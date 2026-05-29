@@ -8,7 +8,7 @@ A multi-tier Windows desktop application engineered for F&B franchise management
 * **Database & ACID Transactions:** Architected a **MySQL** relational database. Applied strict transaction structures (`BEGIN`, `COMMIT`, `ROLLBACK`) to ensure 100% data integrity during concurrent order processing and automated inventory deductions.
 * **OOP Architecture:** Utilized Interface implementation, Abstraction, and Polymorphism to handle dynamic UI rendering and multi-window routing.
 
-## ⚙️ Prerequisites for Running
+## Prerequisites for Running
 To test this application locally, you must have the following installed:
 1. **Windows OS** with .NET Desktop Runtime (v6.0 or higher).
 2. **MySQL Server** (or XAMPP/WAMP) running on port `3306`.
