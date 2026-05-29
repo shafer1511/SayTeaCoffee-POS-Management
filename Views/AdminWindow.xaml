@@ -1,0 +1,393 @@
+<Window x:Class="TraSuaApp.Views.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TraSuaApp.Views"
+        Title="Say Tea Coffee - Quản Trị Admin" Height="756" Width="1130" WindowStartupLocation="CenterScreen" Background="#F8F8F8">
+    <Window.Resources>
+        <local:ProductTypeConverter x:Key="ProductTypeConverter"/>
+        <Style x:Key="DataGridTextWrapStyle" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4,2,4,2"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Margin" Value="0,5,0,12"/>
+            <Setter Property="Padding" Value="12,8,12,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#1A1A1A"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="15,8,15,8"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9F9F9"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="13*"/>
+            <ColumnDefinition Width="17*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Starbucks Green -->
+        <Border Grid.Row="0" Background="#00704A" Padding="20,0,20,0" Grid.ColumnSpan="2">
+            <DockPanel VerticalAlignment="Center">
+                <TextBlock Text="🍵 SAY TEA COFFEE | QUẢN TRỊ HỆ THỐNG" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Foreground="White" />
+                <Button Content="🚪 ĐĂNG XUẤT" HorizontalAlignment="Right" Width="140" Height="40" Background="#DC3545" Foreground="White" FontWeight="Bold" Click="btnLogout_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#DC3545"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="Padding" Value="15,8,15,8"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C82333"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </DockPanel>
+        </Border>
+
+        <!-- Tab Control -->
+        <TabControl x:Name="AdminMainTabControl" Grid.Row="1" Background="White" BorderBrush="#E0E0E0" Grid.ColumnSpan="2" SelectionChanged="AdminMainTabControl_SelectionChanged">
+            <TabItem x:Name="tabBranchManagement" Header="📍 Quản Lý Chi Nhánh" FontSize="13" FontWeight="SemiBold">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="197*"/>
+                        <ColumnDefinition Width="456*"/>
+                        <ColumnDefinition Width="351*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DataGrid Name="dgBranches" Grid.Column="0" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,15,0" RowHeight="32" FontSize="12" BorderBrush="#E0E0E0" SelectionChanged="dgBranches_SelectionChanged" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
+                            <DataGridTextColumn Header="Tên Chi Nhánh" Binding="{Binding Name}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Border Grid.Column="2" Background="#FFFFFF" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="8" Padding="18">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="🆕 MỞ CHI NHÁNH MỚI" FontWeight="Bold" Foreground="#00704A" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBox Name="txtNewBranch" Tag="Nhập tên chi nhánh..." Text="Nhập tên chi nhánh..." Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBox Name="txtStaffUser" Tag="Tài khoản (Username)" Text="Tài khoản (Username)" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBox Name="txtStaffPass" Tag="Mật khẩu (Password)" Text="Mật khẩu (Password)" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <Button Content="✓ Tạo Chi Nhánh" Height="42" Background="#28A745" Click="btnCreateBranch_Click" Margin="0,0,0,15"/>
+                                <Button Content="✗ XÓA CHI NHÁNH" Height="42" Background="#DC3545" Click="btnDeleteBranch_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabEmployeeManagement" Header="👥 Quản Lý Nhân Viên" FontSize="13" FontWeight="SemiBold">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Trái: danh sách — Grid + hàng * để DataGrid chiếm hết chiều cao tab (StackPanel trước đây làm lưới chỉ cao tối thiểu) -->
+                    <Grid Grid.Column="0" Margin="0,0,15,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Chọn chi nhánh" FontWeight="Bold" FontSize="13" Margin="0,0,0,10" Foreground="#00704A" x:Name="lblBranchSelect"/>
+                        <ComboBox Grid.Row="1" Name="cbEmployeeBranch" Height="38" FontSize="12" Margin="0,0,0,12" SelectionChanged="cbEmployeeBranch_SelectionChanged" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                        <GroupBox Grid.Row="2" Header="Danh sách nhân viên" FontWeight="Bold" FontSize="12" Padding="10" BorderBrush="#E0E0E0" BorderThickness="1" Background="White" VerticalAlignment="Stretch">
+                            <DataGrid Name="dgEmployees" AutoGenerateColumns="False" IsReadOnly="True" MinRowHeight="32" FontSize="11" BorderBrush="#E0E0E0" SelectionMode="Single"
+                                      VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Mã" Binding="{Binding EmpId}" Width="80" ElementStyle="{StaticResource DataGridTextWrapStyle}"/>
+                                    <DataGridTextColumn Header="Tên" Binding="{Binding Name}" Width="2*" ElementStyle="{StaticResource DataGridTextWrapStyle}"/>
+                                    <DataGridTextColumn Header="Ca" Binding="{Binding Shift}" Width="90" ElementStyle="{StaticResource DataGridTextWrapStyle}"/>
+                                    <DataGridTextColumn Header="Giờ" Binding="{Binding WorkTime}" Width="140" ElementStyle="{StaticResource DataGridTextWrapStyle}"/>
+                                    <DataGridTextColumn Header="Vai trò" Binding="{Binding JobRole}" Width="90" ElementStyle="{StaticResource DataGridTextWrapStyle}"/>
+                                    <DataGridTextColumn Header="Trạng Thái" Binding="{Binding PresentStatus}" Width="100" ElementStyle="{StaticResource DataGridTextWrapStyle}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </GroupBox>
+                    </Grid>
+
+                    <Border Grid.Column="1" Background="#FFFFFF" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="8" Padding="12" MinWidth="300" MaxWidth="420" VerticalAlignment="Top">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" MaxHeight="560">
+                            <StackPanel>
+                                <TextBlock Text="👔 THÊM / QUẢN LÝ NHÂN VIÊN" FontWeight="Bold" Foreground="#00704A" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBlock Name="txtAutoEmpId" Text="Mã sẽ tự động: NV001..." FontSize="11" Foreground="#666" Margin="0,0,0,12"/>
+                                <TextBox Name="txtEmpName" Tag="Tên nhân viên" Text="Tên nhân viên" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <ComboBox Name="cbEmpShift" Height="38" Margin="0,0,0,12" FontSize="12" SelectionChanged="cbEmpShift_SelectionChanged">
+                                    <ComboBoxItem Content="Ca Sáng" IsSelected="True"/>
+                                    <ComboBoxItem Content="Ca Chiều"/>
+                                    <ComboBoxItem Content="Ca Tối"/>
+                                </ComboBox>
+                                <TextBlock Text="Vai trò" FontSize="11" Foreground="#666" Margin="0,0,0,4"/>
+                                <ComboBox Name="cbEmpRole" Height="38" Margin="0,0,0,12" FontSize="12" SelectionChanged="cbEmpRole_SelectionChanged">
+                                    <ComboBoxItem Content="Phục vụ" IsSelected="True"/>
+                                    <ComboBoxItem Content="Pha chế"/>
+                                    <ComboBoxItem Content="Thu ngân"/>
+                                </ComboBox>
+                                <TextBlock Text="Thời gian làm (5 giờ theo ca):" FontSize="11" Foreground="#666" Margin="0,0,0,4"/>
+                                <TextBox Name="txtEmpWorkTime" IsReadOnly="True" Height="38" Margin="0,0,0,12" FontSize="12" Background="#F0F8F4" BorderBrush="#D0D0D0" VerticalContentAlignment="Center" Padding="10,0" Foreground="#1A1A1A"/>
+                                <CheckBox Name="chkEmpPresent" Content="Đã chấm công" Margin="0,0,0,15"/>
+                                <StackPanel x:Name="spEmpAccountFields" Visibility="Collapsed">
+                                    <!-- Ô nhập Tài khoản (Thiết kế bắt chước y hệt style của bạn) -->
+                                    <TextBox Name="txtTaiKhoanNV" Tag="Tài khoản nhân viên" Text="Tài khoản nhân viên" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+
+                                    <!-- Ô nhập Mật khẩu -->
+                                    <TextBox Name="txtMatKhauNV" Tag="Mật khẩu" Text="Mật khẩu" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                </StackPanel>
+                                <Button Content="🔄 Chuyển trạng thái công" Height="42" Background="#17A2B8" Click="btnToggleEmployee_Click"/>
+                                <Button Content="✓ Thêm Nhân Viên" Height="42" Background="#28A745" Click="btnAddEmployee_Click"/>
+                                <TextBox x:Name="txtDelEmployeeId" Tag="Nhập ID cần xóa" Text="Nhập ID cần xóa" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <Button Content="✗ Xóa Nhân Viên" Height="42" Background="#DC3545" Click="btnDeleteEmployee_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabPosSales" Header="💰 Vào Bán Hàng" FontSize="13" FontWeight="SemiBold">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="💰 VÀO BÁN HÀNG" FontSize="18" FontWeight="Bold" Foreground="#00704A" Margin="0,0,0,20"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,25">
+                        <TextBlock x:Name="lblSalesBranch" Text="Chi nhánh bán hàng:" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Foreground="#00704A" Margin="0,0,10,0"/>
+                        <ComboBox Name="cbSalesBranch" Width="260" Height="38" FontSize="12" SelectedValuePath="Id" SelectionChanged="cbSalesBranch_SelectionChanged"/>
+                    </StackPanel>
+                    <Button Grid.Row="2" Content="🚀 MỞ GIAO DIỆN BÁN HÀNG" Height="60" Width="320" Background="#007BFF" Foreground="White" FontSize="16" FontWeight="Bold" Click="btnManageStore_Click" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabGlobalMenu" Header="🍵 Menu Toàn Hệ Thống" FontSize="13" FontWeight="SemiBold">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65*"/>
+                        <ColumnDefinition Width="35*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid Name="dgGlobalMenu" SelectionChanged="dgGlobalMenu_SelectionChanged" Grid.Column="0" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,15,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
+                            <DataGridTextColumn Header="Tên Món" Binding="{Binding Name}" Width="200"/>
+                            <DataGridTextColumn Header="Giá" Binding="{Binding BasePrice, StringFormat=N0}" Width="100"/>
+                            <DataGridTextColumn Header="Loại" Binding="{Binding Type, Converter={StaticResource ProductTypeConverter}}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Border Grid.Column="1" Background="#FFFFFF" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="8" Padding="18">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="➕ THÊM MÓN MỚI" FontWeight="Bold" Foreground="#00704A" FontSize="13" Margin="0,0,0,10"/>
+                                <ComboBox Name="cbType" Height="38" Margin="0,0,0,10" FontSize="12">
+                                    <ComboBoxItem Content="Nước Uống" IsSelected="True"/>
+                                    <ComboBoxItem Content="Topping"/>
+                                </ComboBox>
+                                <TextBox Name="txtNewName" Tag="Tên món" Text="Tên món" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBox Name="txtNewPrice" Tag="Giá bán" Text="Giá bán" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBox Name="txtNewStock" Tag="Số lượng kho" Text="Số lượng kho" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <Button Content="✓ Thêm Món" Height="42" Background="#28A745" Click="btnAddGlobalProduct_Click" Margin="0,0,0,15"/>
+
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Margin="0,0,0,15"/>
+
+                                <TextBlock Text="⚡ CÔNG CỤ TỰ ĐỘNG" FontWeight="Bold" Foreground="#FF8C00" FontSize="13" Margin="0,0,0,10"/>
+                                <Button Name="btnAutoGenGlobal" Content="⭐ TẠO 20 MÓN MẪU (TOÀN HT)" Height="45" Background="#FF8C00" Click="btnAutoGenGlobal_Click" Margin="0,0,0,15"/>
+
+                                <TextBlock Text="✗ XÓA MÓN" FontWeight="Bold" Foreground="#DC3545" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBox Name="txtDelId" Tag="Nhập ID cần xóa" Text="Nhập ID cần xóa" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <Button Content="✗ Xóa Món" Height="42" Background="#DC3545" Click="btnDelGlobalProduct_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabVoucher" Header="🎟️ Quản Lý Voucher" FontSize="13" FontWeight="SemiBold">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65*"/>
+                        <ColumnDefinition Width="35*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid Name="dgVouchers" SelectionChanged="dgVouchers_SelectionChanged" Grid.Column="0" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,15,0" RowHeight="32" FontSize="12" BorderBrush="#E0E0E0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mã Code" Binding="{Binding Code}" Width="100"/>
+                            <DataGridTextColumn Header="Giảm Giá (%)" Binding="{Binding DiscountPercent}" Width="100"/>
+                            <DataGridTextColumn Header="Tối đa (VND)" Binding="{Binding MaxDiscount, StringFormat=N0}" Width="120"/>
+                            <DataGridTextColumn Header="HSD" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Border Grid.Column="1" Background="#FFFFFF" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="8" Padding="18">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="➕ TẠO VOUCHER MỚI" FontWeight="Bold" Foreground="#00704A" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBox Name="txtVCode" Tag="Mã Code (VD: SAVE50)" Text="Mã Code (VD: SAVE50)" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBox Name="txtVPct" Tag="% Giảm (0.5 = 50%)" Text="% Giảm (0.5 = 50%)" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBox Name="txtVMax" Tag="Giảm tối đa" Text="Giảm tối đa" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <TextBlock Text="Hạn sử dụng:" FontSize="12" FontWeight="SemiBold" Margin="0,5,0,5"/>
+                                <DatePicker Name="dpVExpiry" Height="38" Margin="0,0,0,10"/>
+                                <Button Content="✓ Thêm Voucher" Height="42" Background="#28A745" Click="btnAddVoucher_Click" Margin="0,0,0,15"/>
+
+                                <TextBlock Text="✗ XÓA VOUCHER" FontWeight="Bold" Foreground="#DC3545" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBox Name="txtDelVoucher" Tag="Nhập mã Code" Text="Nhập mã Code" Foreground="Gray" GotFocus="RemovePlaceholder" LostFocus="AddPlaceholder"/>
+                                <Button Content="✗ Xóa Voucher" Height="42" Background="#DC3545" Click="btnDelVoucher_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabReports" Header="⚠️ Hộp Thư Sự Cố" FontSize="13" FontWeight="SemiBold" Foreground="#D32F2F">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="📬 YÊU CẦU HỖ TRỢ TỪ CÁC CHI NHÁNH" FontSize="15" FontWeight="Bold" Margin="0,0,0,12"/>
+
+                    <DataGrid Name="dgReports" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" RowHeight="42" FontSize="12" BorderBrush="#E0E0E0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Thời Gian" Binding="{Binding CreatedAt, StringFormat='dd/MM/yyyy HH:mm'}" Width="120"/>
+                            <DataGridTextColumn Header="Chi Nhánh" Binding="{Binding StoreId}" Width="80"/>
+
+                            <DataGridTextColumn Header="Loại Yêu Cầu" Binding="{Binding ReportType}" Width="150"/>
+
+                            <DataGridTextColumn Header="Nội Dung" Binding="{Binding Message}" Width="*"/>
+
+                            <DataGridTextColumn Header="Trạng Thái" Binding="{Binding StatusText}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Grid.Row="2" Content="✅ ĐÃ XỬ LÝ" Height="48" Background="#28A745" Foreground="White" FontSize="14" FontWeight="Bold" Margin="0,15,0,0" Click="btnResolveReport_Click"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabAdminDetailedReport" Header="📊 Báo Cáo Chi Tiết (Admin)" FontSize="13" FontWeight="SemiBold">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Báo cáo doanh thu theo chi nhánh và khoảng thời gian (chỉ dành cho Admin)" FontSize="12" Foreground="#666" Margin="0,0,0,14"/>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="320"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Trái: thẻ chi nhánh (tự thêm khi có chi nhánh; bấm để mở báo cáo chi tiết) -->
+                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                            <TextBlock Text="Chọn chi nhánh để xem báo cáo chi tiết:" FontWeight="SemiBold" FontSize="13" Foreground="#00704A" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="220" HorizontalScrollBarVisibility="Disabled">
+                                <ItemsControl x:Name="icAdminReportBranches">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Margin="0,0,10,10" Padding="0" Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                                    Click="btnAdminReportBranchCard_Click" Tag="{Binding}">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="#007BFF" CornerRadius="8" Padding="18,14" MinWidth="160">
+                                                            <StackPanel>
+                                                                <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="Bold" FontSize="15" TextWrapping="Wrap"/>
+                                                                <TextBlock Text="Xem chi tiết" Foreground="#E3F2FF" FontSize="12" Margin="0,8,0,0"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </StackPanel>
+
+                        <!-- Phải: lọc báo cáo -->
+                        <Border Grid.Column="1" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="8" Padding="20">
+                            <StackPanel>
+                                <TextBlock Text="📊 LỌC BÁO CÁO" FontWeight="Bold" FontSize="15" Foreground="#00704A" Margin="0,0,0,16"/>
+                                <TextBlock Text="Chi nhánh:" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,6"/>
+                                <ComboBox x:Name="cbAdminReportBranch" Height="38" FontSize="13" Margin="0,0,0,14"
+                                          DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                <TextBlock Text="Từ ngày:" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,6"/>
+                                <DatePicker x:Name="dpAdminReportFrom" Height="38" Margin="0,0,0,12"/>
+                                <TextBlock Text="Đến ngày:" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,6"/>
+                                <DatePicker x:Name="dpAdminReportTo" Height="38" Margin="0,0,0,18"/>
+                                <Button Content="🔄 ĐỒNG BỘ CHI NHÁNH" Height="44" Margin="0,0,0,10" FontWeight="Bold" Foreground="White" FontSize="13" Cursor="Hand"
+                                        Background="#6C757D" Click="btnAdminReportSyncBranches_Click"/>
+                                <Button Content="📄 XEM BÁO CÁO" Height="44" Margin="0,0,0,10" FontWeight="Bold" Foreground="White" FontSize="13" Cursor="Hand"
+                                        Background="#007BFF" Click="btnAdminReportView_Click"/>
+                                <Button Content="📥 EXPORT BÁO CÁO" Height="44" FontWeight="Bold" Foreground="White" FontSize="13" Cursor="Hand"
+                                        Background="#28A745" Click="btnAdminReportExport_Click"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tabSystem" Header="⚙️ Hệ Thống" FontSize="13" FontWeight="SemiBold">
+                <StackPanel Margin="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="⚙️ ĐIỀU KHIỂN HỆ THỐNG" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,35" Foreground="#333"/>
+
+                    <Button Content="🚪 ĐĂNG XUẤT (Về màn hình đăng nhập)" Height="55" Width="360" Margin="0,0,0,40" Background="#343A40" Foreground="White" FontSize="14" FontWeight="Bold" Click="btnLogout_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1A1A1A"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <TextBlock Text="🚨 CẢNH BÁO NGUY HIỂM" Foreground="#DC3545" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="Xóa toàn bộ dữ liệu hệ thống" Margin="0,0,0,18" HorizontalAlignment="Center" Foreground="#666" FontSize="12"/>
+                    <Button Content="🗑️ RESET TOÀN BỘ HỆ THỐNG" Height="55" Width="360" Background="#8B0000" Foreground="White" FontSize="14" FontWeight="Bold" Click="btnResetSystem_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#660000"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

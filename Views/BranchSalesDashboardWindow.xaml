@@ -1,0 +1,73 @@
+﻿<Window x:Class="TraSuaApp.Views.BranchSalesDashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Báo cáo bán hàng — Chi nhánh"
+        Height="720" Width="1020"
+        MinHeight="520" MinWidth="800"
+        WindowStartupLocation="CenterOwner"
+        Background="#F8F8F8" ResizeMode="CanResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,12" LastChildFill="False">
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock x:Name="txtBranchDashboardTitle" FontSize="22" FontWeight="Bold" Foreground="#00704A"/>
+                <TextBlock x:Name="txtBranchDashboardPeriod" FontSize="13" Foreground="#666" Margin="0,8,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+            <Button DockPanel.Dock="Right" Content="📥 Export CSV" Height="40" MinWidth="140" Padding="16,0"
+                    Background="#28A745" Foreground="White" FontWeight="Bold" FontSize="13" Cursor="Hand"
+                    VerticalAlignment="Top" Click="btnExportCsv_Click"/>
+        </DockPanel>
+
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,10">
+            <Border Background="#E8F5E9" BorderBrush="#C8E6C9" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="Số hóa đơn" FontSize="12" Foreground="#2E7D32"/>
+                    <TextBlock x:Name="txtDashKpiOrders" FontSize="22" FontWeight="Bold" Foreground="#1B5E20" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Background="#E3F2FD" BorderBrush="#BBDEFB" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="Thực thu (đ)" FontSize="12" Foreground="#1565C0"/>
+                    <TextBlock x:Name="txtDashKpiNet" FontSize="20" FontWeight="Bold" Foreground="#0D47A1" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+            <Border Background="#FFF3E0" BorderBrush="#FFE0B2" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="Tổng giảm (đ)" FontSize="12" Foreground="#E65100"/>
+                    <TextBlock x:Name="txtDashKpiDiscount" FontSize="20" FontWeight="Bold" Foreground="#BF360C" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+            <Border Background="#F3E5F5" BorderBrush="#E1BEE7" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                <StackPanel>
+                    <TextBlock Text="TB / hóa đơn (đ)" FontSize="12" Foreground="#6A1B9A"/>
+                    <TextBlock x:Name="txtDashKpiAvg" FontSize="20" FontWeight="Bold" Foreground="#4A148C" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <TextBlock x:Name="txtDashKpiGrossLine" Grid.Row="2" FontSize="13" Foreground="#444" Margin="0,0,0,14" TextWrapping="Wrap"/>
+
+        <GroupBox Grid.Row="3" Header="📜 Lịch sử bán hàng (hóa đơn)" FontWeight="Bold" FontSize="13" Padding="8" BorderBrush="#E0E0E0" Margin="0,0,0,12">
+            <DataGrid x:Name="dgInvoices" AutoGenerateColumns="False" IsReadOnly="True"
+                      RowHeight="34" FontSize="12" BorderBrush="#E0E0E0" CanUserAddRows="False"
+                      VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mã HĐ" Binding="{Binding InvoiceId}" Width="120"/>
+                    <DataGridTextColumn Header="Chi nhánh" Binding="{Binding StoreId}" Width="90"/>
+                    <DataGridTextColumn Header="Thu ngân" Binding="{Binding StaffName}" Width="140"/>
+                    <DataGridTextColumn Header="Thời gian" Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}" Width="140"/>
+                    <DataGridTextColumn Header="Tổng gốc" Binding="{Binding TotalOrigin, StringFormat=N0}" Width="100"/>
+                    <DataGridTextColumn Header="Voucher" Binding="{Binding VoucherCode}" Width="100"/>
+                    <DataGridTextColumn Header="Giảm" Binding="{Binding DiscountAmount, StringFormat=N0}" Width="90"/>
+                    <DataGridTextColumn Header="Thực thu" Binding="{Binding FinalTotal, StringFormat=N0}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+    </Grid>
+</Window>

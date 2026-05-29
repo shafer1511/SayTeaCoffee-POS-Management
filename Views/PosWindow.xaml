@@ -1,0 +1,170 @@
+<Window x:Class="TraSuaApp.Views.PosWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TraSuaApp.Views"
+        Title="Say Tea Coffee - Bán Hàng" Height="850" Width="1200" WindowStartupLocation="CenterScreen" Background="#F5F5F5">
+    <Window.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="#1A1A1A"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9F9F9"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Starbucks Green -->
+        <Border Grid.Row="0" Background="#00704A" Padding="20,0,20,0">
+            <DockPanel VerticalAlignment="Center">
+                <TextBlock Text="🍵 SAY TEA COFFEE | BÁN HÀNG" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Name="txtUserInfo" Text="Nhân viên: ..." FontSize="12" Foreground="White" VerticalAlignment="Center" Margin="0,0,20,0" Height="18" Width="200"/>
+                    <Button Content="⚠️ Báo Cáo" Height="35" Width="100" Background="#FFA500" Foreground="White" FontWeight="Bold" Margin="0,0,10,0" Click="btnReport_Click"/>
+                    <Button Content="🚪 Đăng Xuất" Height="35" Width="100" Background="#DC3545" Foreground="White" FontWeight="Bold" Click="btnLogout_Click"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="40*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid Grid.Column="0" Margin="0,0,15,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Danh Sách Nước Uống -->
+                <GroupBox Header="🍹 DANH SÁCH THỨC UỐNG" Grid.Row="0" FontWeight="Bold" FontSize="12" Margin="0,0,0,12" Padding="12">
+                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+                        <DataGrid Name="dgDrinks" SelectionChanged="dgMenu_SelectionChanged" AutoGenerateColumns="False" IsReadOnly="True"  RowHeight="28" FontSize="12" BorderThickness="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="🔥 Danh Hiệu" Binding="{Binding DisplayName}" Width="220"/>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="Giá" Binding="{Binding BasePrice, StringFormat=N0}" Width="80"/>
+                                <DataGridTextColumn Header="Kho" Binding="{Binding Stock}" Width="60"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </GroupBox>
+
+                <!-- Danh Sách Topping -->
+                <GroupBox Header="🍨 DANH SÁCH TOPPING" Grid.Row="1" FontWeight="Bold" FontSize="12" Margin="0,0,0,12" Padding="12">
+                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+                        <DataGrid Name="dgToppings" SelectionChanged="dgMenu_SelectionChanged" AutoGenerateColumns="False" IsReadOnly="True" RowHeight="28" FontSize="12" BorderThickness="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tên Topping" Binding="{Binding DisplayName}" Width="220"/>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="Giá" Binding="{Binding BasePrice, StringFormat=N0}" Width="80"/>
+                                <DataGridTextColumn Header="Kho" Binding="{Binding Stock}" Width="60"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </GroupBox>
+
+                <!-- Tùy Chọn -->
+                <GroupBox Header="✏️ TÙY CHỌN &amp; THÊM VÀO GIỎ" Grid.Row="2" FontSize="12" Padding="12">
+                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="12">
+                        <StackPanel IsEnabled="False" Name="pnlCustom">
+                            <TextBlock Name="txtSelectedProduct" Text="📦 Chưa chọn món..." Foreground="#0066CC" FontWeight="Bold" Margin="0,0,0,12"/>
+                            
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="SIZE:" Width="80" FontWeight="SemiBold"/>
+                                <RadioButton Name="rbSizeS" Content="S" IsChecked="True" Margin="0,0,20,0" Checked="rbSizeS_Checked"/>
+                                <RadioButton Name="rbSizeM" Content="M (+5k)" Margin="0,0,20,0"/>
+                                <RadioButton Name="rbSizeL" Content="L (+10k)"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="ĐƯỜNG:" Width="80" FontWeight="SemiBold"/>
+                                <RadioButton Name="rbS100" Content="100%" IsChecked="True" Margin="0,0,20,0"/>
+                                <RadioButton Name="rbS50" Content="50%" Margin="0,0,20,0"/>
+                                <RadioButton Name="rbS0" Content="0%"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <TextBlock Text="ĐÁ:" Width="80" FontWeight="SemiBold"/>
+                                <RadioButton Name="rbI100" Content="100%" IsChecked="True" Margin="0,0,20,0"/>
+                                <RadioButton Name="rbI50" Content="50%" Margin="0,0,20,0"/>
+                                <RadioButton Name="rbI0" Content="0%"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <TextBlock Text="SỐ LƯỢNG:" Width="80" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBox Name="txtQty" Text="1" Width="60" Height="32" TextAlignment="Center" VerticalContentAlignment="Center" Background="#F0F0F0" BorderBrush="#D0D0D0"/>
+                            </StackPanel>
+                            <Button x:Name="btnAddToCart" Content="✓ THÊM VÀO GIỎ HÀNG" Height="42" Background="#28A745" Foreground="White" FontWeight="Bold" Click="btnAddToCart_Click" IsEnabled="False"/>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+            </Grid>
+
+            <!-- Right Panel: Giỏ Hàng -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions> 
+                    <RowDefinition Height="*"/> 
+                    <RowDefinition Height="Auto"/> 
+                </Grid.RowDefinitions>
+                
+                <GroupBox Header="🛒 GIỎ HÀNG" Grid.Row="0" FontWeight="Bold" FontSize="12" Padding="12" Margin="0,0,0,12">
+                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+                        <Grid>
+                            <Grid.RowDefinitions> <RowDefinition Height="*"/> <RowDefinition Height="Auto"/> </Grid.RowDefinitions>
+                            <ListBox Name="lbCart" Grid.Row="0" FontSize="11" DisplayMemberPath="DisplayText" Margin="0,0,0,8" Background="White"/>
+                            <Button Grid.Row="1" Content="❌ BỎ HÀNG ĐANG CHỌN" Height="36" Background="#DC3545" Foreground="White" FontWeight="Bold" Click="btnRemoveCartItem_Click"/>
+                        </Grid>
+                    </Border>
+                </GroupBox>
+                
+                <StackPanel Grid.Row="1">
+                    <!-- Voucher Selection -->
+                    <GroupBox Header="🎟️ CHỌN VOUCHER" FontSize="11" FontWeight="Bold" Padding="12" Margin="0,0,0,12">
+                        <StackPanel>
+                            <ComboBox Name="cbVouchers" Height="36" Margin="0,0,0,8" FontSize="11" DisplayMemberPath="DisplayText"/>
+                            <Button x:Name="btnApplyVoucher" Click="btnApplyVoucher_Click" Content="✓ ÁP DỤNG" Height="36" Background="#007BFF" Foreground="White" FontWeight="Bold" />
+                            <Button Name="btnCancelVoucher" Click="btnCancelVoucher_Click" Content="X BỎ VOUCHER" Background="#E51400" Foreground="White" Margin="0,5,0,0" Height="32"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Discount & Total -->
+                    <Border Background="#E6F7FF" BorderBrush="#0066CC" BorderThickness="1" CornerRadius="5" Padding="12" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock x:Name="txtDiscountAmount" Text="💚 Giảm giá: 0 đ" FontSize="13" Foreground="#00704A" Margin="0,0,0,8" HorizontalAlignment="Right"/>
+                            <Separator Margin="0,0,0,8"/>
+                            <TextBlock Name="txtTotal" Text="CẦN THANH TOÁN: 0 đ" FontSize="18" FontWeight="Bold" Foreground="#DC3545" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Checkout Button -->
+                    <Button Content="✓ CHỐT ĐƠN / IN HÓA ĐƠN" Height="65" Background="#FF8C00" Foreground="White" FontSize="14" FontWeight="Bold" Click="btnCheckout_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E67E00"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
